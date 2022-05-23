@@ -43,10 +43,10 @@ table {
   height: auto;
 }
 .floor {
-  background-color: gray;
+  background-color: #7c7a79;
 }
 .wall {
-  background-color: brown;
+  background-color: #f24236;
 }
 
 .modal {

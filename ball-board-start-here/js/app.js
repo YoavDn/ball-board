@@ -6,6 +6,7 @@ var PASS = "PASS";
 var TOXIC = "TOXIC";
 var SICK = "SICK";
 
+//imgs
 var GAMER_IMG = '<img src="img/gamer.png" />';
 var BALL_IMG = '<img src="img/ball.png" />';
 var TOXIC_IMG = '<img src="img/toxic.png" />';
@@ -15,26 +16,31 @@ const elBallCount = document.querySelector(".ball-count");
 const elModal = document.querySelector(".modal");
 const elContainer = document.querySelector(".container");
 const kickSound = document.getElementById("kick-sample");
-console.log(kickSound);
 
+//passes
 var gPassUp;
 var gPassDown;
 var gPassLeft;
 var gPassRight;
+// model
 var gBoard;
 var gGamerPos;
+//interval and time
 var gIntervarl;
 var gIntervarl1;
 var gClearInterval;
+var gTimeOut1;
+var gTimeOut2;
+
+//elements
 var gBallCount;
 var gBallOnBoard;
 var gIsGlued;
-var gTimeOut1;
-var gTimeOut2;
 
 function initGame() {
   elModal.classList.add("hidden");
   resetDom();
+
   gPassUp = {
     i: 0,
     j: 6,
@@ -52,6 +58,7 @@ function initGame() {
     j: 11,
   };
   gGamerPos = { i: 2, j: 9 };
+
   gBallCount = 0;
   gBallOnBoard = 0;
   gBoard = buildBoard();
@@ -143,8 +150,6 @@ function renderBoard(board) {
     strHTML += "</tr>\n";
   }
 
-  //   console.log("strHTML is:");
-  //   console.log(strHTML);
   var elBoard = document.querySelector(".board");
   elBoard.innerHTML = strHTML;
 }
@@ -224,7 +229,8 @@ function moveTo(i, j) {
     gGamerPos.j = j;
     gBoard[gGamerPos.i][gGamerPos.j].gameElement = GAMER;
     // DOM:
-    renderCell(gGamerPos, GAMER_IMG);
+    var elCurrGamer = gIsGlued ? GAMER_SICK_IMG : GAMER_IMG;
+    renderCell(gGamerPos, elCurrGamer);
   } // else console.log('TOO FAR', iAbsDiff, jAbsDiff);
 }
 
@@ -275,8 +281,9 @@ function renderRandomEl(board, element) {
   var elImg = element === BALL ? BALL_IMG : TOXIC_IMG;
   var pos = getRandomPos(board);
 
-  //   if (board[pos.i][pos.j].type === "WALL") pos = getRandomPos();
-  if (board[pos.i][pos.j].gameElement !== null) pos = getRandomPos();
+  while (board[pos.i][pos.j].gameElement !== null) {
+    pos = getRandomPos();
+  }
 
   board[pos.i][pos.j].gameElement = element;
 
@@ -289,8 +296,6 @@ function renderRandomEl(board, element) {
       () => (board[pos.i][pos.j].gameElement = null),
       3000
     );
-    // pos.i = null;
-    // pos.j = null;
   }
 }
 
@@ -307,7 +312,7 @@ function updateCell() {
   renderCell(gGamerPos, GAMER_IMG);
 }
 
-function playerSick() {
-  gBoard[gGamerPos.i][gGamerPos.j].gameElement = SICK;
-  renderCell(gGamerPos, GAMER_SICK_IMG);
-}
+// function playerSick() {
+//   gBoard[gGamerPos.i][gGamerPos.j].gameElement = SICK;
+//   renderCell(gGamerPos, GAMER_SICK_IMG);
+// }
